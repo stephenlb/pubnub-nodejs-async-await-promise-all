@@ -1,10 +1,5 @@
 const PubNub = require('pubnub');
-const publisher = new PubNub({
-  publishKey   : "demo",
-  subscribeKey : "demo",
-  keepAlive    : true,
-});
-const subscriber = new PubNub({
+const pubnub = new PubNub({
   publishKey   : "demo",
   subscribeKey : "demo",
   keepAlive    : true,
@@ -12,30 +7,34 @@ const subscriber = new PubNub({
 
 const channel   = "async-await";
 const connected = "PNConnectedCategory";
-const letters   = ['A', 'B', 'C'];
+const letters   = ['A', 'B', 'C', 'D', 'E', 'F'];
 
 async function sendAllAtOnce() {
   let done = await Promise.all(letters.map( async letter => {
-      return publisher.publish({
-        channel: channel, message: { test: "Message"+letter }
-      });
+    return pubnub.publish({
+      channel: channel,
+      message: { test: "Message"+letter },
+    });
   } ));
+  console.log("Parallel PubNub calls done.");
   console.log(done);
 }
 
-subscriber.addListener({
+let received = 0;
+pubnub.addListener({
   message: function(messageEvent) {
     console.log(messageEvent.message);
+    if (++received == letters.length) {
+      pubnub.unsubscribeAll();
+    }
   },
   status: function (statusEvent) {
-    if (statusEvent.category === connected) sendAllAtOnce();
+    if (statusEvent.category === connected) {
+      sendAllAtOnce();
+    }
   },
 });
-//sendAllAtOnce();
-    //try {
-    //} catch(e) { console.error(e) }
-subscriber.subscribe({
+
+pubnub.subscribe({
   channels: [channel],
 });
-
-setTimeout( subscriber.unsubscribeAll, 5000 );
