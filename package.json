@@ -1,0 +1,14 @@
+{
+  "name": "pubnub-nodejs-async-await-promise-all",
+  "version": "1.0.0",
+  "description": "example using Promises.all with async/await PubNub SDK",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pubnub": "^4.29.11"
+  }
+}
