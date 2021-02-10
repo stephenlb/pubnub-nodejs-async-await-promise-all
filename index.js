@@ -7,7 +7,7 @@ const pubnub = new PubNub({
 
 const channel   = "async-await";
 const connected = "PNConnectedCategory";
-const letters   = ['A', 'B', 'C', 'D', 'E', 'F'];
+const letters   = ['A', 'B', 'C'];
 
 async function sendAllAtOnce() {
   let done = await Promise.all(letters.map( async letter => {
@@ -15,15 +15,20 @@ async function sendAllAtOnce() {
       channel: channel,
       message: { test: "Message"+letter },
     });
-  } ));
-  console.log("Parallel PubNub calls done.");
-  console.log(done);
+  })
+  .concat(
+    pubnub.fetchMessages({
+      channels: [channel],
+      count: 2
+    })
+  ));
+  console.log("Parallel PubNub calls complete", done);
 }
 
 let received = 0;
 pubnub.addListener({
   message: function(messageEvent) {
-    console.log(messageEvent.message);
+    console.log("Received", messageEvent.message);
     if (++received == letters.length) {
       pubnub.unsubscribeAll();
     }
