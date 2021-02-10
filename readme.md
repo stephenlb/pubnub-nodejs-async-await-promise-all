@@ -11,6 +11,10 @@ docker build -t pubnub-nodejs-async-await-promise-all .
 docker run pubnub-nodejs-async-await-promise-all
 ```
 
+Sample Output
+
+![PubNub NodeJS SDK Async Await Promies.all()](media/results.png)
+
 ### Use npm to run the example without docker
 
 ```shell

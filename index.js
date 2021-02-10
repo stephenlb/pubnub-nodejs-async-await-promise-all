@@ -10,6 +10,7 @@ const connected = "PNConnectedCategory";
 const letters   = ['A', 'B', 'C'];
 
 async function sendAllAtOnce() {
+  let start = +new Date;
   let done = await Promise.all(letters.map( async letter => {
     return pubnub.publish({
       channel: channel,
@@ -22,7 +23,9 @@ async function sendAllAtOnce() {
       count: 2,
     })
   ));
+  
   console.log("Parallel PubNub calls complete", done);
+  console.log(`${+new Date - start}ms`);
 }
 
 let received = 0;
