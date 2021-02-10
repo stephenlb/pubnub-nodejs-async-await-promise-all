@@ -19,7 +19,7 @@ async function sendAllAtOnce() {
   .concat(
     pubnub.fetchMessages({
       channels: [channel],
-      count: 2
+      count: 2,
     })
   ));
   console.log("Parallel PubNub calls complete", done);
